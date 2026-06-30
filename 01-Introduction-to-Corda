@@ -1,1 +1,618 @@
+# Introduction to R3 Corda
 
+> A comprehensive introduction to R3 Corda, its purpose, design philosophy, enterprise use cases, and how it differs from traditional blockchain platforms.
+
+# Learning Objectives
+
+After completing this chapter, you will be able to:
+
+- Understand what Corda is and why it was built.
+- Explain why enterprises choose Corda over public blockchain platforms.
+- Understand Corda's design philosophy.
+- Describe how transactions flow through a Corda network.
+- Explain how privacy is maintained.
+- Identify real-world enterprise applications.
+
+---
+
+# 1. What is R3 Corda?
+
+## Definition
+
+**R3 Corda** is an enterprise-grade **Distributed Ledger Technology (DLT)** platform that enables businesses to securely exchange data, assets, and agreements while maintaining privacy and regulatory compliance.
+
+Unlike Bitcoin or Ethereum, Corda was **not designed to build cryptocurrencies**.
+
+Its purpose is to digitise business agreements between organisations.
+
+Think of Corda as a secure digital contract platform where only the involved parties can see and verify transactions.
+
+---
+
+# Why Doesn't Corda Call Itself a Blockchain?
+
+Traditional blockchains store transactions inside **blocks**.
+
+```
+Block 1
+   ↓
+Block 2
+   ↓
+Block 3
+```
+
+Every participant stores every block.
+
+Corda does **not** use blocks.
+
+Instead, it stores individual transactions.
+
+```
+Transaction A
+
+↓
+
+Transaction B
+
+↓
+
+Transaction C
+```
+
+Each transaction references previous states instead of belonging to a block.
+
+This makes Corda fundamentally different from Bitcoin and Ethereum.
+
+---
+
+# 2. Why was Corda Created?
+
+Imagine five banks.
+
+```
+Bank A
+Bank B
+Bank C
+Bank D
+Bank E
+```
+
+They all exchange:
+
+- Loans
+- Securities
+- Trade documents
+- Insurance claims
+- Payments
+
+Traditionally, this involves:
+
+- Emails
+- PDFs
+- SWIFT messages
+- Databases
+- Manual verification
+- Legal paperwork
+
+Each organisation keeps its own records.
+
+Problems include:
+
+- Duplicate records
+- Reconciliation delays
+- Human errors
+- High operational costs
+- Lack of transparency between counterparties
+
+R3 designed Corda to eliminate these inefficiencies by allowing organisations to share a single agreed version of transaction data **only with the relevant participants**.
+
+---
+
+# Why Not Use Ethereum?
+
+Ethereum broadcasts every transaction to every node.
+
+Imagine HSBC sends a $500 million loan to Barclays.
+
+Should every other bank know?
+
+No.
+
+Financial institutions require confidentiality.
+
+Corda solves this.
+
+Only the involved organisations receive the transaction.
+
+---
+
+# 3. Design Philosophy
+
+Everything in Corda revolves around four principles.
+
+---
+
+## Privacy First
+
+Data is shared only with participants involved in the transaction.
+
+Example:
+
+```
+Alice
+     \
+      Loan
+     /
+Bank
+```
+
+Charlie is on the same network.
+
+Charlie never receives this transaction.
+
+---
+
+## Trust Through Identity
+
+Every participant has a verified legal identity.
+
+Unlike Bitcoin:
+
+```
+0x8F29A...
+```
+
+Corda identities represent real organisations.
+
+Example:
+
+```
+JP Morgan Chase
+
+HSBC
+
+Bank of America
+```
+
+Every participant knows who they are doing business with.
+
+---
+
+## Legal Agreements
+
+Most business transactions represent legal contracts.
+
+Examples:
+
+- Mortgage
+- Loan
+- Insurance Policy
+- Bond
+- Invoice
+
+Corda combines:
+
+```
+Legal Agreement
+
++
+
+Smart Contract
+
+=
+
+Digitally Enforceable Agreement
+```
+
+---
+
+## Enterprise Integration
+
+Large organisations already use:
+
+- Oracle Database
+- SAP
+- Salesforce
+- Microsoft Dynamics
+- REST APIs
+- ERP Systems
+
+Corda was designed to integrate with these systems rather than replace them.
+
+---
+
+# 4. Core Characteristics
+
+## Permissioned Network
+
+Anyone cannot join a Corda network.
+
+Admission is controlled.
+
+Example:
+
+```
+Approved Members
+
+✓ Bank A
+
+✓ Bank B
+
+✓ Insurance Company
+
+✓ Regulator
+```
+
+Unknown participants cannot connect.
+
+---
+
+## No Mining
+
+Bitcoin:
+
+```
+Transaction
+
+↓
+
+Mining
+
+↓
+
+Block
+
+↓
+
+Confirmation
+```
+
+Corda:
+
+```
+Transaction
+
+↓
+
+Verification
+
+↓
+
+Notary
+
+↓
+
+Finality
+```
+
+No mining.
+
+No gas fees.
+
+No proof-of-work.
+
+---
+
+## No Native Cryptocurrency
+
+Bitcoin has BTC.
+
+Ethereum has ETH.
+
+Corda has no native token.
+
+If a project needs digital assets, developers can model them as states or use token libraries.
+
+---
+
+## Need-to-Know Data Sharing
+
+Only required participants receive data.
+
+Instead of:
+
+```
+Everyone receives the transaction
+```
+
+Corda uses:
+
+```
+Sender
+
+↓
+
+Receiver
+
+↓
+
+Notary
+
+↓
+
+(Optional Regulator)
+```
+
+Nobody else sees the transaction.
+
+---
+
+# 5. How Corda Works
+
+Every business transaction follows the same general lifecycle.
+
+```
+Create State
+
+↓
+
+Create Transaction
+
+↓
+
+Verify Contract Rules
+
+↓
+
+Collect Signatures
+
+↓
+
+Send to Notary
+
+↓
+
+Receive Notary Signature
+
+↓
+
+Record Transaction
+
+↓
+
+Transaction Complete
+```
+
+Each step has a specific purpose:
+
+- State → Business data.
+- Contract → Business rules.
+- Flow → Communication.
+- Notary → Prevents double-spending.
+- Vault → Local storage.
+
+---
+
+# 6. Key Components
+
+| Component | Purpose |
+|-----------|---------|
+| Node | Represents an organisation on the network |
+| State | Immutable business fact (e.g., loan, invoice) |
+| Contract | Defines validation rules |
+| Command | Describes the intended action |
+| Flow | Automates communication between parties |
+| Vault | Stores current and historical states |
+| Notary | Prevents double-spending and validates uniqueness |
+| Network Map | Directory of network participants |
+
+These components work together to process and record business transactions.
+
+---
+
+# 7. Corda Network
+
+A typical Corda network looks like this:
+
+```
+               Notary
+                  |
+      -------------------------
+      |          |           |
+   Bank A     Bank B     Insurance
+      |
+   Customer
+```
+
+Unlike public blockchains, every node does **not** receive every transaction.
+
+Only participants involved in a specific transaction exchange data.
+
+---
+
+# 8. Enterprise Identity
+
+Each organisation is identified by a legal identity backed by digital certificates.
+
+Example:
+
+```
+O=Bank A, L=London, C=GB
+
+O=Insurance Co, L=New York, C=US
+```
+
+This enables authenticated, accountable interactions suitable for regulated industries.
+
+---
+
+# 9. Privacy in Corda
+
+Privacy is one of Corda's defining features.
+
+If Bank A sends a loan agreement to Bank B:
+
+```
+Bank A  ─────────► Bank B
+            │
+            ▼
+         Notary
+```
+
+Other network members do not receive the transaction.
+
+Benefits:
+
+- Commercial confidentiality.
+- Reduced data exposure.
+- Compliance with data privacy regulations.
+- Lower storage requirements.
+
+---
+
+# 10. Transaction Lifecycle
+
+```
+User
+
+↓
+
+Flow Starts
+
+↓
+
+Create State
+
+↓
+
+Create Transaction
+
+↓
+
+Verify Contract
+
+↓
+
+Sign Transaction
+
+↓
+
+Collect Counterparty Signatures
+
+↓
+
+Notary Validates Uniqueness
+
+↓
+
+Finality Flow
+
+↓
+
+Record in Vault
+```
+
+Each participant records the finalised transaction in their own vault.
+
+---
+
+# 11. Real-World Example: Home Loan
+
+Imagine a customer applies for a mortgage.
+
+Participants:
+
+- Customer
+- Bank
+- Property Registrar
+- Regulator (if applicable)
+
+Workflow:
+
+1. Customer submits application.
+2. Bank evaluates eligibility.
+3. Loan agreement is created as a Corda State.
+4. Both parties sign the transaction.
+5. The Notary confirms the state has not already been consumed.
+6. The finalised transaction is recorded in the participants' vaults.
+
+The agreement is private, auditable, and tamper-evident.
+
+---
+
+# 12. Industries Using Corda
+
+## Banking
+
+- Syndicated loans
+- Trade finance
+- Cross-border settlements
+- Securities processing
+
+## Insurance
+
+- Claims processing
+- Policy management
+- Reinsurance
+
+## Supply Chain
+
+- Asset tracking
+- Provenance
+- Shipment verification
+
+## Healthcare
+
+- Consent management
+- Secure document exchange
+
+## Government
+
+- Land registries
+- Licensing
+- Digital identity
+
+---
+
+# 13. Advantages
+
+- Enterprise-focused architecture.
+- High privacy through selective data sharing.
+- No mining or native cryptocurrency.
+- Strong identity model.
+- Designed for regulatory compliance.
+- Efficient communication between counterparties.
+- Integrates with existing enterprise systems.
+
+---
+
+# 14. Limitations
+
+- Not intended for public decentralised applications.
+- Smaller developer ecosystem compared to Ethereum.
+- Requires identity management and network governance.
+- Best suited for permissioned environments.
+
+---
+
+# 15. When Should You Use Corda?
+
+Choose Corda when:
+
+- Multiple organisations need to share trusted data.
+- Transactions contain confidential information.
+- Legal agreements must be digitally represented.
+- Regulatory compliance is important.
+- Participants are known and authenticated.
+
+Avoid Corda when:
+
+- Building a public cryptocurrency.
+- Creating an anonymous permissionless network.
+- Developing decentralised finance (DeFi) protocols for public blockchains.
+
+---
+
+# 16. Key Takeaways
+
+- Corda is an enterprise Distributed Ledger Technology platform.
+- It focuses on privacy, identity, and legal agreements.
+- Transactions are shared only with relevant parties.
+- There is no mining or native cryptocurrency.
+- Corda is designed to integrate with enterprise systems and support regulated industries.
+
+---
+
+# What's Next?
+
+In the next module, **02-Corda-Architecture**, we'll explore Corda's internal building blocks in detail, including Nodes, States, Contracts, Commands, Transactions, Flows, Vaults, Network Map, and Notaries, and see how they work together to form a complete enterprise distributed ledger application.
